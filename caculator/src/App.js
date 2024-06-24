@@ -1,47 +1,53 @@
 import React , {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-
+import Display from "./components/displayCal";
+import NumberMap from "./components/numberMap";
 function App() {
   const [display, setDisplay] = useState('0');
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0,'+','-','/','%','x','^2','AC'];
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0,'+','-','/','%','x','^2','AC','DEL','=','CB2'];
 
+  
   const handleNumberClick = (number) => {
     if(display === '0'){
       setDisplay(number.toString()); 
       
+    }else if(number === 'AC'){
+      setDisplay('0')
+    }else if(number === 'DEL'){
+      delDisplay();
+    }else if(number === '='){
+      calculate();
+    }else if(number === 'CB2'){
+      CB2();
     }else{
       setDisplay((display) => display + number.toString());
-      
     }
-    if(number === 'AC'){
-      setDisplay('0');
-    }
-  }
-
-  const delDisplay = () => {
-    setDisplay((display) => display.slice(0,-1));
-    
-  }
-
-  const caculate = () => {
-    if(display.includes('x')){
-      const result = display.replace(/x/g,'*');
-      setDisplay(eval(result));
-      
-    }else if(display.includes('^2')){
-      const result = display.replace(/\^2/g,'**2');
-      setDisplay(eval(result));
-    }else if(display.includes('--')){
-      const result = display.replace(/--/g, '+');
-      setDisplay(eval(result));
-    }else if(display.includes('++')){
-      const result = display.replace(/\+\+/g, '+');
-      setDisplay(eval(result));
-    }else{
-      setDisplay(eval(display));
     }
     
+    const delDisplay = () => {
+      if(display.length === 1 || display === '0'){
+        setDisplay('0');
+      }else{
+        setDisplay((display) => display.slice(0,-1));
+      }
+      
+      
+    }
+  
+  
+  const calculate = () => {
+    let newDisplay = display.replace(/x/g,'*');
+        newDisplay = newDisplay.replace(/\^2/g,'**2');
+        newDisplay = newDisplay.replace(/--/g, '+');
+        newDisplay = newDisplay.replace(/\+\+/g, '+');
+    try{
+      setDisplay(eval(newDisplay));
+    }catch(error){
+      setDisplay('error')
+    }
+    
+
   }
 
   const CB2 = () => {
@@ -53,71 +59,18 @@ function App() {
   // }
   return (
     <div className="maytinh p-3 border border-secondary m-5">
-      
-      <div className="row p-3 border border-secondary" id="manhinh">{display}</div>
-      <div className="row">
+      <Display displayValue={display}/>
+      <NumberMap numbers={numbers} onClick={handleNumberClick}/>
+      {/* <div className="row">
         {numbers.map(number => (
           
           <div key={number} className="col-3 ">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() => handleNumberClick(number)}
-            >
-              {number}
-            </button>
+            <Btn number={number} onClick={handleNumberClick}/>
           </div>
           
         ))}
-        {/* <div className="col-3">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() => setDisplay('0')}
-            >
-              AC
-            </button>
-          </div> */}
-
-          <div className="col-3">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() => delDisplay()}
-            >
-              DEL
-            </button>
-          </div>
-
-          <div className="col-3">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() => caculate()}
-            >
-              =
-            </button>
-          </div>
-
-          <div className="col-3">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() => CB2()}
-            >
-              CB2
-            </button>
-          </div>
-          {/* <div className="col-3">
-            <button
-              type="button"
-              className="btn col-3 border border-secondary"
-              onClick={() =>  multiplication()}
-            >
-              x
-            </button>
-          </div> */}
-      </div>
+        
+      </div> */}
     </div>
   );
 }
