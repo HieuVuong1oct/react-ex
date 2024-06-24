@@ -1,0 +1,19 @@
+.maytinh{
+  width: 500px;
+  
+}
+
+#manhinh{
+ 
+      background-color: white;
+      color: black;
+      font-size: 20px;
+      border-radius: 10px;
+}
+
+.row{
+  margin: 0;
+}
+.btn{
+  width: 100%;
+}
